@@ -6,23 +6,25 @@ import com.pluoi.tsbot.TeamSpeakBot;
 import com.pluoi.tsbot.command.Command;
 
 public class MessageAll extends Command {
+    private Logger logger = new Logger();
+
     public MessageAll() {
         super("MessageAll", "Message everyone with a given message", "messageall");
     }
 
     @Override
     public void execute(String[] args, int id) {
-        String msg = "";
+        StringBuilder msg = new StringBuilder();
         if (args.length > 0) {
-            for (int i = 0; i < args.length; i++) {
-                msg = msg + args[i] + " ";
+            for (String arg : args) {
+                msg.append(arg).append(" ");
             }
             for (Client client : TeamSpeakBot.api.getClients()) {
-                TeamSpeakBot.api.sendPrivateMessage(client.getId(), msg);
-                Logger.debug("Messaged " + client.getNickname() + " with \"" + msg + "\"");
+                TeamSpeakBot.api.sendPrivateMessage(client.getId(), msg.toString());
+                logger.debug("Messaged " + client.getNickname() + " with \"" + msg + "\"");
             }
         } else {
-            Logger.error("No args found! Please us Messageall <message>", id);
+            logger.error("No args found! Please use messageall <message>", id);
         }
     }
 }

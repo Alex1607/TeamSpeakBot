@@ -5,7 +5,7 @@ import com.github.theholywaffle.teamspeak3.api.wrapper.Client;
 import com.github.theholywaffle.teamspeak3.api.wrapper.ClientInfo;
 import com.pluoi.tsbot.Logger;
 import com.pluoi.tsbot.TeamSpeakBot;
-import com.pluoi.tsbot.event.eventHandler.SupportBot;
+import com.pluoi.tsbot.event.eventhandler.SupportBot;
 import com.pluoi.tsbot.scheduler.Scheduler;
 
 import java.util.concurrent.Executors;
@@ -15,12 +15,13 @@ import java.util.concurrent.TimeUnit;
 
 public class SupporterGroup extends Scheduler {
     private final ScheduledExecutorService scheduler;
-    ScheduledFuture<?> future;
+    private ScheduledFuture<?> future;
     private TS3Api api = TeamSpeakBot.api;
     private String message = TeamSpeakBot.getConfig().getString("supportbot.message.added");
     private int maxtime = TeamSpeakBot.getConfig().getInt("supportbot.maxafktime");
     private int group = TeamSpeakBot.getConfig().getInt("supportbot.group");
     private int period = TeamSpeakBot.getConfig().getInt("function.scheduler.supportergroup.timer");
+    private Logger logger = new Logger();
 
     public SupporterGroup() {
         super("SupporterGroup", "Aktualiesiert die Servergruppe", 0, 10);
@@ -29,7 +30,7 @@ public class SupporterGroup extends Scheduler {
     }
 
     private void run() {
-        Logger.debug("SupporterGroupScheduler runned");
+        logger.debug("SupporterGroupScheduler runned");
         for (Client i : api.getClients()) {
             ClientInfo info = api.getClientInfo(i.getId());
             int dbId = i.getDatabaseId();

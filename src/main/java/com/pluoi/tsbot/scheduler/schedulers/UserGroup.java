@@ -15,12 +15,13 @@ import java.util.concurrent.TimeUnit;
 
 public class UserGroup extends Scheduler {
     private final ScheduledExecutorService scheduler;
-    ScheduledFuture<?> future;
+    private ScheduledFuture<?> future;
     private TS3Api api = TeamSpeakBot.api;
     private int period = TeamSpeakBot.getConfig().getInt("function.scheduler.usergroup.timer");
     private int group = TeamSpeakBot.getConfig().getInt("function.scheduler.usergroup.group");
     private int time = TeamSpeakBot.getConfig().getInt("function.scheduler.usergroup.time");
     private List<String> nothisgroup = (List<String>) TeamSpeakBot.getConfig().getList("function.scheduler.usergroup.nothisgroup");
+    private Logger logger = new Logger();
 
     public UserGroup() {
         super("UserGroupThread", "Gives guests the user group after a time", 0, 30);
@@ -29,7 +30,7 @@ public class UserGroup extends Scheduler {
     }
 
     private void run() {
-        Logger.debug("UserGroup runned");
+        logger.debug("UserGroup runned");
         for (Client i : api.getClients()) {
             ClientInfo info = api.getClientInfo(i.getId());
             if (info == null) {
@@ -46,7 +47,7 @@ public class UserGroup extends Scheduler {
                     }
                 }
                 api.addClientToServerGroup(group, i.getDatabaseId());
-                Logger.write(info.getNickname() + " was added to the User group.", -1);
+                logger.write(info.getNickname() + " was added to the User group.", -1);
             }
         }
     }

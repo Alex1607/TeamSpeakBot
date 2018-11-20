@@ -14,11 +14,12 @@ import java.util.concurrent.TimeUnit;
 
 public class MusikBotMover extends Scheduler {
     private final ScheduledExecutorService scheduler;
-    ScheduledFuture<?> future;
+    private ScheduledFuture<?> future;
     private int storage = TeamSpeakBot.getConfig().getInt("musicbotrent.botstorage");
     private int rentgroup = TeamSpeakBot.getConfig().getInt("musicbotrent.rentgroup");
     private int kickchannel = TeamSpeakBot.getConfig().getInt("musicbotrent.kickchannel");
     private int period = TeamSpeakBot.getConfig().getInt("function.scheduler.musicbotmover.timer");
+    private Logger logger = new Logger();
 
     public MusikBotMover() {
         super("MusikMute", "Checks if the MusikBot is alone and moves him back.", 0, 60);
@@ -27,7 +28,7 @@ public class MusikBotMover extends Scheduler {
     }
 
     private void run() {
-        Logger.debug("MusikBotMover runned");
+        logger.debug("MusikBotMover runned");
         ArrayList<Integer> tempChannels = new ArrayList<>();
         for (Channel channel : TeamSpeakBot.api.getChannels()) {
             if (channel.getTotalClients() == 1) {

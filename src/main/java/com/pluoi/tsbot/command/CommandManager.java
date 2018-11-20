@@ -7,24 +7,24 @@ import com.pluoi.tsbot.command.commands.*;
 import java.util.ArrayList;
 
 public class CommandManager {
-    private static ArrayList<Command> commands = new ArrayList<>();
-    private boolean clientlist = TeamSpeakBot.config.getBoolean("function.command.clientlist.enabled");
-    private boolean randomchannelcreator = TeamSpeakBot.config.getBoolean("function.command.randomchannelcreator.enabled");
-    private boolean debug = TeamSpeakBot.config.getBoolean("function.command.debug.enabled");
-    private boolean removetempchannels = TeamSpeakBot.config.getBoolean("function.command.removetempchannels.enabled");
-    private boolean help = TeamSpeakBot.config.getBoolean("function.command.help.enabled");
-    private boolean messageall = TeamSpeakBot.config.getBoolean("function.command.messageall.enabled");
-    private boolean pokeall = TeamSpeakBot.config.getBoolean("function.command.pokeall.enabled");
-    private boolean tempchannelstoperm = TeamSpeakBot.config.getBoolean("function.command.tempchannelstoperm.enabled");
-
+    private ArrayList<Command> commands = new ArrayList<>();
+    private boolean clientlist = TeamSpeakBot.getConfig().getBoolean("function.command.clientlist.enabled");
+    private boolean randomchannelcreator = TeamSpeakBot.getConfig().getBoolean("function.command.randomchannelcreator.enabled");
+    private boolean debug = TeamSpeakBot.getConfig().getBoolean("function.command.debug.enabled");
+    private boolean removetempchannels = TeamSpeakBot.getConfig().getBoolean("function.command.removetempchannels.enabled");
+    private boolean help = TeamSpeakBot.getConfig().getBoolean("function.command.help.enabled");
+    private boolean messageall = TeamSpeakBot.getConfig().getBoolean("function.command.messageall.enabled");
+    private boolean pokeall = TeamSpeakBot.getConfig().getBoolean("function.command.pokeall.enabled");
+    private boolean tempchannelstoperm = TeamSpeakBot.getConfig().getBoolean("function.command.tempchannelstoperm.enabled");
+    private Logger logger = new Logger();
 
     public CommandManager() {
-        Logger.write("Starting CommandManager...", -1);
+        logger.write("Starting CommandManager...", -1);
         registerCommands();
-        Logger.write("CommandManager started!", -1);
+        logger.write("CommandManager started!", -1);
     }
 
-    public static ArrayList<Command> getCommands() {
+    public ArrayList<Command> getCommands() {
         return commands;
     }
 

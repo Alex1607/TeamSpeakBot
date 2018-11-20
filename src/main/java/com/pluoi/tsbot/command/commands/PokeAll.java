@@ -6,23 +6,24 @@ import com.pluoi.tsbot.TeamSpeakBot;
 import com.pluoi.tsbot.command.Command;
 
 public class PokeAll extends Command {
+    private Logger logger = new Logger();
     public PokeAll() {
         super("PokeAll", "Pokes everyone with a given message", "pokeall");
     }
 
     @Override
     public void execute(String[] args, int id) {
-        String msg = "";
+        StringBuilder msg = new StringBuilder();
         if (args.length > 0) {
-            for (int i = 0; i < args.length; i++) {
-                msg = msg + args[i] + " ";
+            for (String arg : args) {
+                msg.append(arg).append(" ");
             }
             for (Client client : TeamSpeakBot.api.getClients()) {
-                TeamSpeakBot.api.pokeClient(client.getId(), msg);
-                Logger.debug("Poked " + client.getNickname() + " with \"" + msg + "\"");
+                TeamSpeakBot.api.pokeClient(client.getId(), msg.toString());
+                logger.debug("Poked " + client.getNickname() + " with \"" + msg + "\"");
             }
         } else {
-            Logger.error("No args found! Please us pokeall <message>", id);
+            logger.error("No args found! Please us pokeall <message>", id);
         }
     }
 }

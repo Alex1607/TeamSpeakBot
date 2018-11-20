@@ -1,4 +1,4 @@
-package com.pluoi.tsbot.event.eventHandler;
+package com.pluoi.tsbot.event.eventhandler;
 
 import com.github.theholywaffle.teamspeak3.TS3Api;
 import com.github.theholywaffle.teamspeak3.api.event.ChannelCreateEvent;
@@ -8,13 +8,15 @@ import com.pluoi.tsbot.TeamSpeakBot;
 import com.pluoi.tsbot.event.Event;
 
 import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 public class ChannelSpam extends Event {
-    static HashMap<Integer, Long> channelCreateTime = new HashMap<>();
+    private static Map<Integer, Long> channelCreateTime = new HashMap<>();
     private TS3Api api = TeamSpeakBot.api;
     private String message = TeamSpeakBot.getConfig().getString("antichannelspam.message");
     private int configtime = TeamSpeakBot.getConfig().getInt("antichannelspam.waittime");
+    private Logger logger = new Logger();
 
     public static void resetTimer() {
         channelCreateTime.clear();
@@ -41,7 +43,7 @@ public class ChannelSpam extends Event {
                 return;
             }
         }
-        Logger.write("Created new Channel: " + api.getChannelInfo(e.getChannelId()).getName(), -1);
+        logger.write("Created new Channel: " + api.getChannelInfo(e.getChannelId()).getName(), -1);
         channelCreateTime.put(id, time);
     }
 }

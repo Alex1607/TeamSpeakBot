@@ -4,40 +4,53 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Logger {
-    public static boolean debugMode = false;
-    private static String timeStamp = new SimpleDateFormat("HH:mm:ss").format(new Date());
 
-    public static void write(String message, int id) {
+    private boolean debugMode;
+    private Logger logger;
+
+    public Logger() {
+        logger = this;
+    }
+
+    public boolean isDebugMode() {
+        return debugMode;
+    }
+
+    public void setDebugMode(boolean debugMode) {
+        this.debugMode = debugMode;
+    }
+
+    public Logger getLogger() {
+        return logger;
+    }
+
+    public void write(String message, int id) {
         if (id == -1) {
-            newTime();
-            System.out.println("[" + timeStamp + " INFO] " + message);
+            System.out.println("[" + getTime() + " INFO] " + message);
         } else {
             TeamSpeakBot.api.sendPrivateMessage(id, message);
         }
     }
 
-    public static void chat(String message) {
-        newTime();
-        System.out.println("[" + timeStamp + " CHAT] " + message);
+    public void chat(String message) {
+        System.out.println("[" + getTime() + " CHAT] " + message);
     }
 
-    public static void error(String message, int id) {
+    public void error(String message, int id) {
         if (id == -1) {
-            newTime();
-            System.out.println("[" + timeStamp + " Error] " + message);
+            System.out.println("[" + getTime() + " Error] " + message);
         } else {
             TeamSpeakBot.api.sendPrivateMessage(id, message);
         }
     }
 
-    public static void debug(String message) {
-        if (debugMode) {
-            newTime();
-            System.out.println("[" + timeStamp + " DEBUG] " + message);
+    public void debug(String message) {
+        if (isDebugMode()) {
+            System.out.println("[" + getTime() + " DEBUG] " + message);
         }
     }
 
-    private static void newTime() {
-        timeStamp = new SimpleDateFormat("HH:mm:ss").format(new Date());
+    private String getTime() {
+        return new SimpleDateFormat("HH:mm:ss").format(new Date());
     }
 }

@@ -13,12 +13,13 @@ public class SchedulerManager {
     private boolean randomcatgif = TeamSpeakBot.getConfig().getBoolean("function.scheduler.randomcatgif.enabled");
     private boolean supportergroup = TeamSpeakBot.getConfig().getBoolean("function.scheduler.supportergroup.enabled");
     private boolean usergroup = TeamSpeakBot.getConfig().getBoolean("function.scheduler.usergroup.enabled");
+    private Logger logger = new Logger();
 
     public SchedulerManager() {
-        Logger.write("Starting ScheduleManager...", -1);
+        logger.write("Starting ScheduleManager...", -1);
         registerThreads();
         startSchdulers();
-        Logger.write("ScheduleManager started!", -1);
+        logger.write("ScheduleManager started!", -1);
     }
 
     public static ArrayList<Scheduler> getActiveThreads() {

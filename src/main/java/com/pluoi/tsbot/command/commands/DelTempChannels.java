@@ -6,6 +6,7 @@ import com.pluoi.tsbot.TeamSpeakBot;
 import com.pluoi.tsbot.command.Command;
 
 public class DelTempChannels extends Command {
+    private Logger logger = new Logger();
     public DelTempChannels() {
         super("DelTempChannels", "Removes all temp-channels which are not in use", "deltempchannels");
     }
@@ -13,12 +14,11 @@ public class DelTempChannels extends Command {
     @Override
     public void execute(String[] args, int id) {
         for (Channel channel : TeamSpeakBot.api.getChannels()) {
-            if (channel.isEmpty()) {
-                if (channel.isPermanent() == false && channel.isSemiPermanent() == false) {
-                    Logger.write("Removed channel " + channel.getName(), id);
-                    TeamSpeakBot.api.deleteChannel(channel.getId());
-                }
+            if (!channel.isEmpty() || channel.isPermanent() || channel.isSemiPermanent()) {
+                continue;
             }
+            logger.write("Removed channel " + channel.getName(), id);
+            TeamSpeakBot.api.deleteChannel(channel.getId());
         }
     }
 }

@@ -13,6 +13,7 @@ import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
@@ -20,23 +21,24 @@ import java.util.concurrent.TimeUnit;
 
 public class RandomGif extends Scheduler {
     private final ScheduledExecutorService scheduler;
-    ScheduledFuture<?> future;
+    private ScheduledFuture<?> future;
     private TS3Api api = TeamSpeakBot.api;
     private int period = TeamSpeakBot.getConfig().getInt("function.scheduler.randomcatgif.timer");
     private int channel = TeamSpeakBot.getConfig().getInt("function.scheduler.randomcatgif.channel");
+    private Logger logger = new Logger();
 
     public RandomGif() {
-        super("RandomGif", "Sets a random Cat gif in the channel", 0, 120);
+        super("RandomGif", "Sets a random cat gif in the channel", 0, 120);
         this.setPeriod(period);
         scheduler = Executors.newScheduledThreadPool(1);
     }
 
-    public static String readFromWeb(String webURL) throws IOException {
+    private String readFromWeb(String webURL) throws IOException {
         URL url = new URL(webURL);
         InputStream is = url.openStream();
         try (BufferedReader br = new BufferedReader(new InputStreamReader(is))) {
             String temp = br.readLine();
-            Logger.debug(temp);
+            logger.debug(temp);
             return temp;
         } catch (MalformedURLException e) {
             e.printStackTrace();
@@ -48,8 +50,8 @@ public class RandomGif extends Scheduler {
     }
 
     private void run() {
-        Logger.debug("RandomGif runned");
-        HashMap<ChannelProperty, String> properties = new HashMap<>();
+        logger.debug("RandomGif runned");
+        Map<ChannelProperty, String> properties = new HashMap<>();
         try {
             properties.put(ChannelProperty.CHANNEL_DESCRIPTION, "[img]" + readFromWeb("http://api.pluoi.com/gif/index.php?q=cat") + "[/img]");
         } catch (IOException e) {

@@ -4,6 +4,7 @@ import com.pluoi.tsbot.Logger;
 import com.pluoi.tsbot.command.Command;
 
 public class Debug extends Command {
+    private Logger logger = new Logger();
     public Debug() {
         super("Debug", "Disabled / Enables the debug messages", "debug");
     }
@@ -11,15 +12,15 @@ public class Debug extends Command {
     @Override
     public void execute(String[] args, int id) {
         if (id != -1) {
-            Logger.write("Console only!", id);
+            logger.write("Console only!", id);
             return;
         }
-        if (Logger.debugMode) {
-            Logger.debugMode = false;
-            Logger.write("Debug mode disabled!", id);
+        if (logger.isDebugMode()) {
+            logger.setDebugMode(false);
+            logger.write("Debug mode disabled!", id);
         } else {
-            Logger.debugMode = true;
-            Logger.write("Debug mode enabled!", id);
+            logger.setDebugMode(true);
+            logger.write("Debug mode enabled!", id);
         }
     }
 }

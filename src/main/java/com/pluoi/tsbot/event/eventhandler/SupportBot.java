@@ -1,4 +1,4 @@
-package com.pluoi.tsbot.event.eventHandler;
+package com.pluoi.tsbot.event.eventhandler;
 
 import com.github.theholywaffle.teamspeak3.TS3Api;
 import com.github.theholywaffle.teamspeak3.api.TextMessageTargetMode;
@@ -17,10 +17,11 @@ import java.util.regex.Pattern;
 public class SupportBot extends Event {
     public static ArrayList<String> afk = new ArrayList<>();
     public static ArrayList<Integer> rentingMusic = new ArrayList<>();
-    public static HashMap<Integer, String> sup = new HashMap<>();
-    Timer timer = new Timer();
+    private Map<Integer, String> sup = new HashMap<>();
+    private Timer timer = new Timer();
     private TS3Api api = TeamSpeakBot.api;
-    private HashMap<Integer, TimerTask> timers = new HashMap<>();
+    private Map<Integer, TimerTask> timers = new HashMap<>();
+    private Logger logger = new Logger();
 
     private String removefromgroup = TeamSpeakBot.getConfig().getString("supportbot.message.removed");
     private String nosups = TeamSpeakBot.getConfig().getString("supportbot.message.nosups");
@@ -45,26 +46,31 @@ public class SupportBot extends Event {
             for (String functions : joinfunctions) {
                 parseAndExecute(functions, clientid, api.getClientInfo(clientid));
             }
-            TimerTask t = new TimerTask() {
-                @Override
-                public void run() {
-                    if (api.getClientInfo(event.getClientId()) != null) {
-                        if (api.getClientInfo(event.getClientId()).getChannelId() == supportchannel) {
-                            for (String functions : afkfunctions) {
-                                parseAndExecute(functions, clientid, api.getClientInfo(clientid));
-                            }
-                        }
-                    }
-                }
-            };
-            timers.put(event.getClientId(), t);
-            timer.schedule(timers.get(event.getClientId()), maxwaitingtime);
+            startIdleTimer(clientid);
         } else {
             if (timers.containsKey(event.getClientId())) {
                 timers.get(event.getClientId()).cancel();
                 timers.remove(event.getClientId());
             }
         }
+    }
+
+    private void startIdleTimer(int clientid) {
+        TimerTask t = new TimerTask() {
+            @Override
+            public void run() {
+                if (api.getClientInfo(clientid) == null) {
+                    return;
+                }
+                if (api.getClientInfo(clientid).getChannelId() == supportchannel) {
+                    for (String functions : afkfunctions) {
+                        parseAndExecute(functions, clientid, api.getClientInfo(clientid));
+                    }
+                }
+            }
+        };
+        timers.put(clientid, t);
+        timer.schedule(timers.get(clientid), maxwaitingtime);
     }
 
     @Override
@@ -79,9 +85,9 @@ public class SupportBot extends Event {
             }
             if (message.length() < maxmsglenght) {
                 ClientInfo ci = api.getClientInfo(event.getInvokerId());
-                Logger.chat(ci.getNickname() + " -> " + message);
+                logger.chat(ci.getNickname() + " -> " + message);
                 Boolean enabled = TeamSpeakBot.getConfig().getBoolean("supportbot.messages." + message + ".enabled");
-                if (enabled == null || enabled == false) {
+                if (enabled == null || !enabled) {
                     msg(iid, didntunterstand);
                     return;
                 }
@@ -100,8 +106,8 @@ public class SupportBot extends Event {
     private void supportReady(int id, String message) {
         int supCount = 0;
         message = message.replace("%name%", "[URL=" + api.getClientInfo(id).getClientURI() + "]" + api.getClientInfo(id).getNickname() + "[/URL]");
-        message = message.replace("%category%", sup.containsKey(id) ? sup.get(id) : "->");
-        Logger.debug("SupporterGroupEvent runned");
+        message = message.replace("%category%", sup.getOrDefault(id, "->"));
+        logger.debug("SupporterGroupEvent runned");
         for (Client i : api.getClients()) {
             ClientInfo info = api.getClientInfo(i.getId());
             int dbId = i.getDatabaseId();
@@ -142,16 +148,13 @@ public class SupportBot extends Event {
     }
 
     private void parseAndExecute(String function, int id, ClientInfo clientInfo) {
-        Logger.debug(function);
+        logger.debug(function);
         String functionName = function.split("\\(\\{")[0];
         Matcher m = Pattern.compile("\\(\\{(.*)}\\)").matcher(function);
         while (m.find()) {
-            //Logger.debug("while1");
-            //Logger.debug(String.valueOf(m.group(1)));
-
             String args[] = m.group(1).split(";");
-            Logger.debug(functionName);
-            Logger.debug(String.valueOf(args.length));
+            logger.debug(functionName);
+            logger.debug(String.valueOf(args.length));
             switch (functionName) {
                 case "msg":
                     msg(id, args[0]);
@@ -199,51 +202,41 @@ public class SupportBot extends Event {
                     break;
                 case "cartegorymatch":
                     if (sup.get(id).equalsIgnoreCase(args[0]) && sup.containsKey(id)) {
-                        if (args[1].contains("|,|")) {
-                            String func[] = args[1].split("\\|,\\|");
-                            String[] funcs = func;
-                            for (String tempfunc : funcs) {
-                                parseAndExecute(tempfunc.replace("[{", "({").replace("}]", "})"), id, clientInfo);
-                            }
-                        } else {
-                            parseAndExecute(args[1].replace("[{", "({").replace("}]", "})"), id, clientInfo);
-                        }
+                        executeFunctionTrue(id, clientInfo, args);
                     } else {
-                        if (args[2].contains("|,|")) {
-                            String func[] = args[2].split("\\|,\\|");
-                            String[] funcs = func;
-                            for (String tempfunc : funcs) {
-                                parseAndExecute(tempfunc.replace("[{", "({").replace("}]", "})"), id, clientInfo);
-                            }
-                        } else {
-                            parseAndExecute(args[2].replace("[{", "({").replace("}]", "})"), id, clientInfo);
-                        }
+                        executeFunctionFalse(id, clientInfo, args);
                     }
                     break;
                 case "hasgroup":
                     if (clientInfo.isInServerGroup(Integer.parseInt(args[0]))) {
-                        if (args[1].contains("|,|")) {
-                            String func[] = args[1].split("\\|,\\|");
-                            String[] funcs = func;
-                            for (String tempfunc : funcs) {
-                                parseAndExecute(tempfunc.replace("[{", "({").replace("}]", "})"), id, clientInfo);
-                            }
-                        } else {
-                            parseAndExecute(args[1].replace("[{", "({").replace("}]", "})"), id, clientInfo);
-                        }
+                        executeFunctionTrue(id, clientInfo, args);
                     } else {
-                        if (args[2].contains("|,|")) {
-                            String func[] = args[2].split("\\|,\\|");
-                            String[] funcs = func;
-                            for (String tempfunc : funcs) {
-                                parseAndExecute(tempfunc.replace("[{", "({").replace("}]", "})"), id, clientInfo);
-                            }
-                        } else {
-                            parseAndExecute(args[2].replace("[{", "({").replace("}]", "})"), id, clientInfo);
-                        }
+                        executeFunctionFalse(id, clientInfo, args);
                     }
                     break;
             }
+        }
+    }
+
+    private void executeFunctionTrue(int id, ClientInfo clientInfo, String[] args) {
+        if (args[1].contains("|,|")) {
+            String[] funcs = args[1].split("\\|,\\|");
+            for (String tempfunc : funcs) {
+                parseAndExecute(tempfunc.replace("[{", "({").replace("}]", "})"), id, clientInfo);
+            }
+        } else {
+            parseAndExecute(args[1].replace("[{", "({").replace("}]", "})"), id, clientInfo);
+        }
+    }
+
+    private void executeFunctionFalse(int id, ClientInfo clientInfo, String[] args) {
+        if (args[2].contains("|,|")) {
+            String[] funcs = args[2].split("\\|,\\|");
+            for (String tempfunc : funcs) {
+                parseAndExecute(tempfunc.replace("[{", "({").replace("}]", "})"), id, clientInfo);
+            }
+        } else {
+            parseAndExecute(args[2].replace("[{", "({").replace("}]", "})"), id, clientInfo);
         }
     }
 }
