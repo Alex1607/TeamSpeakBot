@@ -91,15 +91,23 @@ public class SupportBot extends Event {
                     msg(iid, didntunterstand);
                     return;
                 }
-                List<String> functions = (List<String>) TeamSpeakBot.getConfig().getList("supportbot.messages." + message + ".functions");
-                for (String tempfunc : functions) {
-                    parseAndExecute(tempfunc, iid, ci);
-                }
+                getFunctionsAndRun("supportbot.messages." + message + ".functions", iid, ci);
             }
             if (timers.containsKey(iid)) {
                 timers.get(iid).cancel();
                 timers.remove(iid);
             }
+        }
+    }
+
+    private void getFunctionsAndRun(String path, int invokerID, ClientInfo clientInfo) {
+        List<String> functions = (List<String>) TeamSpeakBot.getConfig().getList(path);
+        boolean returned = false;
+        for (String tempfunc : functions) {
+            if (returned) {
+                continue;
+            }
+            returned = parseAndExecute(tempfunc, invokerID, clientInfo);
         }
     }
 
@@ -147,7 +155,7 @@ public class SupportBot extends Event {
         api.sendPrivateMessage(id, msg.replace("%br%", "\n"));
     }
 
-    private void parseAndExecute(String function, int id, ClientInfo clientInfo) {
+    private boolean parseAndExecute(String function, int id, ClientInfo clientInfo) {
         logger.debug(function);
         String functionName = function.split("\\(\\{")[0];
         Matcher m = Pattern.compile("\\(\\{(.*)}\\)").matcher(function);
@@ -191,6 +199,8 @@ public class SupportBot extends Event {
                     //TODO: Diese Funktion kann genutzt werden wenn mehrere cartegorymatchs untereinander ausgefürt werden sollen da diese bei zb der zweiten funktion nichts ausführen! ---> artegorymatch({Teamspeak;tohuman[{}];donothing[{}]})
                     //TODO: Darunter kann dann die nächste Abfrage kommen ohne das der Nutzer etwas von der darüber mitbekommen hat.
                     break;
+                case "return":
+                    return true;
                 case "rentbot":
                     String channelName = TeamSpeakBot.api.getChannelInfo(25).getName(); // Schlafen Raum
                     int clientCount = TeamSpeakBot.api.getChannelByNameExact(channelName, false).getTotalClients();
@@ -214,8 +224,12 @@ public class SupportBot extends Event {
                         executeFunctionFalse(id, clientInfo, args);
                     }
                     break;
+                case "function":
+                    getFunctionsAndRun("supportbot.functions." + args[0], id, clientInfo);
+                    break;
             }
         }
+        return false;
     }
 
     private void executeFunctionTrue(int id, ClientInfo clientInfo, String[] args) {
