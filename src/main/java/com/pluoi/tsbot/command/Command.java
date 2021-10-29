@@ -1,11 +1,15 @@
 package com.pluoi.tsbot.command;
 
-public abstract class Command {
-    private String name;
-    private String description;
-    private String command;
+import com.pluoi.tsbot.Logger;
 
-    public Command(String name, String description, String command) {
+public abstract class Command {
+    protected static final Logger logger = new Logger();
+
+    private final String name;
+    private final String description;
+    private final String command;
+
+    protected Command(String name, String description, String command) {
         this.name = name;
         this.description = description;
         this.command = command;

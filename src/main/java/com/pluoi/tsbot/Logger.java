@@ -4,13 +4,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Logger {
-
     private boolean debugMode;
-    private Logger logger;
-
-    public Logger() {
-        logger = this;
-    }
 
     public boolean isDebugMode() {
         return debugMode;
@@ -18,10 +12,6 @@ public class Logger {
 
     public void setDebugMode(boolean debugMode) {
         this.debugMode = debugMode;
-    }
-
-    public Logger getLogger() {
-        return logger;
     }
 
     public void write(String message, int id) {
@@ -45,7 +35,7 @@ public class Logger {
     }
 
     public void debug(String message) {
-        if (isDebugMode()) {
+        if (this.debugMode) {
             System.out.println("[" + getTime() + " DEBUG] " + message);
         }
     }

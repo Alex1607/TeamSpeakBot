@@ -1,8 +1,11 @@
 package com.pluoi.tsbot.event;
 
 import com.github.theholywaffle.teamspeak3.api.event.*;
+import com.pluoi.tsbot.Logger;
 
 public class Event {
+    protected static final Logger logger = new Logger();
+
     public void executeJoinEvent(ClientJoinEvent event) {
         for (Event e : EventManager.getEvents()) {
             e.JoinEvent(event);

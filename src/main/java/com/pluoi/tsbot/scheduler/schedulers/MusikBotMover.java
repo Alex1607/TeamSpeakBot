@@ -15,11 +15,10 @@ import java.util.concurrent.TimeUnit;
 public class MusikBotMover extends Scheduler {
     private final ScheduledExecutorService scheduler;
     private ScheduledFuture<?> future;
-    private int storage = TeamSpeakBot.getConfig().getInt("musicbotrent.botstorage");
-    private int rentgroup = TeamSpeakBot.getConfig().getInt("musicbotrent.rentgroup");
-    private int kickchannel = TeamSpeakBot.getConfig().getInt("musicbotrent.kickchannel");
-    private int period = TeamSpeakBot.getConfig().getInt("function.scheduler.musicbotmover.timer");
-    private Logger logger = new Logger();
+    private final int storage = TeamSpeakBot.getConfig().getInt("musicbotrent.botstorage");
+    private final int rentgroup = TeamSpeakBot.getConfig().getInt("musicbotrent.rentgroup");
+    private final int kickchannel = TeamSpeakBot.getConfig().getInt("musicbotrent.kickchannel");
+    private final int period = TeamSpeakBot.getConfig().getInt("function.scheduler.musicbotmover.timer");
 
     public MusikBotMover() {
         super("MusikMute", "Checks if the MusikBot is alone and moves him back.", 0, 60);
@@ -44,10 +43,8 @@ public class MusikBotMover extends Scheduler {
                 if (client.isInServerGroup(rentgroup)) {
                     TeamSpeakBot.api.moveClient(client.getId(), storage);
                 }
-            } else if (channelId == kickchannel) {
-                if (client.isInServerGroup(rentgroup)) {
-                    TeamSpeakBot.api.moveClient(client.getId(), storage);
-                }
+            } else if (channelId == kickchannel && client.isInServerGroup(rentgroup)) {
+                TeamSpeakBot.api.moveClient(client.getId(), storage);
             }
         }
     }
@@ -61,6 +58,4 @@ public class MusikBotMover extends Scheduler {
     public void stop() {
         future.cancel(true);
     }
-
-
 }

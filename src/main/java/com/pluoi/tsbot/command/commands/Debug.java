@@ -1,10 +1,8 @@
 package com.pluoi.tsbot.command.commands;
 
-import com.pluoi.tsbot.Logger;
 import com.pluoi.tsbot.command.Command;
 
 public class Debug extends Command {
-    private Logger logger = new Logger();
     public Debug() {
         super("Debug", "Disabled / Enables the debug messages", "debug");
     }

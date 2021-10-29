@@ -1,16 +1,13 @@
 package com.pluoi.tsbot.command.commands;
 
 import com.github.theholywaffle.teamspeak3.api.wrapper.Client;
-import com.pluoi.tsbot.Logger;
 import com.pluoi.tsbot.TeamSpeakBot;
 import com.pluoi.tsbot.command.Command;
 
 import java.util.concurrent.TimeUnit;
 
-public class clientlist extends Command {
-    private Logger logger = new Logger();
-
-    public clientlist() {
+public class ClientList extends Command {
+    public ClientList() {
         super("ClientList", "Lists all current users on the Teamspeak", "clientlist");
     }
 

@@ -16,12 +16,10 @@ import java.util.concurrent.TimeUnit;
 public class UserGroup extends Scheduler {
     private final ScheduledExecutorService scheduler;
     private ScheduledFuture<?> future;
-    private TS3Api api = TeamSpeakBot.api;
-    private int period = TeamSpeakBot.getConfig().getInt("function.scheduler.usergroup.timer");
-    private int group = TeamSpeakBot.getConfig().getInt("function.scheduler.usergroup.group");
-    private int time = TeamSpeakBot.getConfig().getInt("function.scheduler.usergroup.time");
-    private List<String> nothisgroup = (List<String>) TeamSpeakBot.getConfig().getList("function.scheduler.usergroup.nothisgroup");
-    private Logger logger = new Logger();
+    private final int period = TeamSpeakBot.getConfig().getInt("function.scheduler.usergroup.timer");
+    private final int group = TeamSpeakBot.getConfig().getInt("function.scheduler.usergroup.group");
+    private final int time = TeamSpeakBot.getConfig().getInt("function.scheduler.usergroup.time");
+    private final List<String> nothisgroup = (List<String>) TeamSpeakBot.getConfig().getList("function.scheduler.usergroup.nothisgroup");
 
     public UserGroup() {
         super("UserGroupThread", "Gives guests the user group after a time", 0, 30);
@@ -31,22 +29,19 @@ public class UserGroup extends Scheduler {
 
     private void run() {
         logger.debug("UserGroup runned");
-        for (Client i : api.getClients()) {
-            ClientInfo info = api.getClientInfo(i.getId());
-            if (info == null) {
-                continue;
-            }
-            if (info.isServerQueryClient()) {
+        for (Client i : TeamSpeakBot.api.getClients()) {
+            ClientInfo info = TeamSpeakBot.api.getClientInfo(i.getId());
+            if (info == null|| info.isServerQueryClient()) {
                 continue;
             }
 
             if (info.getTimeConnected() > time) {
-                for (int group : info.getServerGroups()) {
-                    if (nothisgroup.contains(String.valueOf(group))) {
+                for (int g : info.getServerGroups()) {
+                    if (nothisgroup.contains(String.valueOf(g))) {
                         return;
                     }
                 }
-                api.addClientToServerGroup(group, i.getDatabaseId());
+                TeamSpeakBot.api.addClientToServerGroup(group, i.getDatabaseId());
                 logger.write(info.getNickname() + " was added to the User group.", -1);
             }
         }

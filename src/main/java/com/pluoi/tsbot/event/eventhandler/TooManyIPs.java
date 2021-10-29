@@ -11,12 +11,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class TooManyIPs extends Event {
-    private Map<String, Integer> ips = new HashMap<>();
-    private Map<Integer, ClientInfo> clientinfo = new HashMap<>();
-    private String message = TeamSpeakBot.getConfig().getString("iplimit.message");
-    private int bantime = TeamSpeakBot.getConfig().getInt("iplimit.bantime");
-    private int maxclients = TeamSpeakBot.getConfig().getInt("iplimit.maxclients");
-    private Logger logger = new Logger();
+    private final Map<String, Integer> ips = new HashMap<>();
+    private final Map<Integer, ClientInfo> clientinfo = new HashMap<>();
+    private final String message = TeamSpeakBot.getConfig().getString("iplimit.message");
+    private final int bantime = TeamSpeakBot.getConfig().getInt("iplimit.bantime");
+    private final int maxclients = TeamSpeakBot.getConfig().getInt("iplimit.maxclients");
 
     @Override
     public void JoinEvent(ClientJoinEvent event) {

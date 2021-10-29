@@ -12,6 +12,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.Executors;
@@ -22,10 +23,8 @@ import java.util.concurrent.TimeUnit;
 public class RandomGif extends Scheduler {
     private final ScheduledExecutorService scheduler;
     private ScheduledFuture<?> future;
-    private TS3Api api = TeamSpeakBot.api;
-    private int period = TeamSpeakBot.getConfig().getInt("function.scheduler.randomcatgif.timer");
-    private int channel = TeamSpeakBot.getConfig().getInt("function.scheduler.randomcatgif.channel");
-    private Logger logger = new Logger();
+    private final int period = TeamSpeakBot.getConfig().getInt("function.scheduler.randomcatgif.timer");
+    private final int channel = TeamSpeakBot.getConfig().getInt("function.scheduler.randomcatgif.channel");
 
     public RandomGif() {
         super("RandomGif", "Sets a random cat gif in the channel", 0, 120);
@@ -51,13 +50,13 @@ public class RandomGif extends Scheduler {
 
     private void run() {
         logger.debug("RandomGif runned");
-        Map<ChannelProperty, String> properties = new HashMap<>();
+        Map<ChannelProperty, String> properties = new EnumMap<>(ChannelProperty.class);
         try {
             properties.put(ChannelProperty.CHANNEL_DESCRIPTION, "[img]" + readFromWeb("http://api.pluoi.com/gif/index.php?q=cat") + "[/img]");
         } catch (IOException e) {
             e.printStackTrace();
         }
-        api.editChannel(channel, properties);
+        TeamSpeakBot.api.editChannel(channel, properties);
     }
 
     @Override

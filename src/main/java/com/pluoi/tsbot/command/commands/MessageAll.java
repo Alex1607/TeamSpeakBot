@@ -1,13 +1,10 @@
 package com.pluoi.tsbot.command.commands;
 
 import com.github.theholywaffle.teamspeak3.api.wrapper.Client;
-import com.pluoi.tsbot.Logger;
 import com.pluoi.tsbot.TeamSpeakBot;
 import com.pluoi.tsbot.command.Command;
 
 public class MessageAll extends Command {
-    private Logger logger = new Logger();
-
     public MessageAll() {
         super("MessageAll", "Message everyone with a given message", "messageall");
     }

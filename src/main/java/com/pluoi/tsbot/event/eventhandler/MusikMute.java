@@ -8,11 +8,9 @@ import com.pluoi.tsbot.TeamSpeakBot;
 import com.pluoi.tsbot.event.Event;
 
 public class MusikMute extends Event {
-
-    private int normalgroup = TeamSpeakBot.getConfig().getInt("botmuter.channel.normalgroup");
-    private int mutegroup = TeamSpeakBot.getConfig().getInt("botmuter.channel.mutegroup");
-    private int botgroup = TeamSpeakBot.getConfig().getInt("botmuter.server.botgroup");
-    private Logger logger = new Logger();
+    private final int normalgroup = TeamSpeakBot.getConfig().getInt("botmuter.channel.normalgroup");
+    private final int mutegroup = TeamSpeakBot.getConfig().getInt("botmuter.channel.mutegroup");
+    private final int botgroup = TeamSpeakBot.getConfig().getInt("botmuter.server.botgroup");
 
     @Override
     public void ClientMove(ClientMovedEvent event) {
