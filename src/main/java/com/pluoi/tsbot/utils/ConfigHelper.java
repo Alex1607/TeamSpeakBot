@@ -6,6 +6,7 @@ import org.simpleyaml.exceptions.InvalidConfigurationException;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class ConfigHelper {
@@ -131,12 +132,12 @@ public class ConfigHelper {
         config.set("supportbot.messages.bug.enabled", true);
 
 
-        temp = Arrays.asList("msg({%br%Die Vorraussetzungen für den YouTuber / Premi+ Rang findest du hier: [URL]https://grv.sh/yt[/URL]%br%Wenn du diese Erfüllst schreibe '[color=#ff0000][b]yt-ja[/b][/color]' ansonsten melde dich bitte wenn du die Vorraussetzungen erfüllst. Wichtig: Wir machen KEINE Ausnahmen!})");
+        temp = Collections.singletonList("msg({%br%Die Vorraussetzungen für den YouTuber / Premi+ Rang findest du hier: [URL]https://grv.sh/yt[/URL]%br%Wenn du diese Erfüllst schreibe '[color=#ff0000][b]yt-ja[/b][/color]' ansonsten melde dich bitte wenn du die Vorraussetzungen erfüllst. Wichtig: Wir machen KEINE Ausnahmen!})");
         config.set("supportbot.messages.yt.functions", temp);
         config.set("supportbot.messages.yt.enabled", true);
 
 
-        temp = Arrays.asList("msg({Bitte schreibe mir welche Spiele Gruppe du benötigst:%br%[color=#429b57][b]game-mc[/b][/color] (Minecraft)%br%[color=#429b57][b]game-fortnite[/b][/color] (Fortnite)%br%[color=#429b57][b]game-lol[/b][/color] (League of Legends)%br%[color=#429b57][b]game-csgo[/b][/color] (CS:GO)%br%[color=#429b57][b]game-pubg[/b][/color] (PUBG)%br%[color=#429b57][b]game-arma[/b][/color] (Arma)%br%[color=#429b57][b]game-battlefield[/b][/color] (Battlefield)%br%[color=#429b57][b]game-gta[/b][/color] (GTA)%br%[color=#429b57][b]game-fifa[/b][/color] (FIFA)%br%[color=#429b57][b]game-osu[/b][/color] (OSU)%br%[color=#429b57][b]game-fifa[/b][/color] (rocketleague)%br%[color=#429b57][b]game-overwatch[/b][/color] (overwatch)})");
+        temp = Collections.singletonList("msg({Bitte schreibe mir welche Spiele Gruppe du benötigst:%br%[color=#429b57][b]game-mc[/b][/color] (Minecraft)%br%[color=#429b57][b]game-fortnite[/b][/color] (Fortnite)%br%[color=#429b57][b]game-lol[/b][/color] (League of Legends)%br%[color=#429b57][b]game-csgo[/b][/color] (CS:GO)%br%[color=#429b57][b]game-pubg[/b][/color] (PUBG)%br%[color=#429b57][b]game-arma[/b][/color] (Arma)%br%[color=#429b57][b]game-battlefield[/b][/color] (Battlefield)%br%[color=#429b57][b]game-gta[/b][/color] (GTA)%br%[color=#429b57][b]game-fifa[/b][/color] (FIFA)%br%[color=#429b57][b]game-osu[/b][/color] (OSU)%br%[color=#429b57][b]game-fifa[/b][/color] (rocketleague)%br%[color=#429b57][b]game-overwatch[/b][/color] (overwatch)})");
         config.set("supportbot.messages.gruppen.functions", temp);
         config.set("supportbot.messages.gruppen.enabled", true);
 
@@ -161,12 +162,12 @@ public class ConfigHelper {
         config.set("supportbot.messages.report.enabled", true);
 
 
-        temp = Arrays.asList("endsupport({})");
+        temp = Collections.singletonList("endsupport({})");
         config.set("supportbot.messages.quit.functions", temp);
         config.set("supportbot.messages.quit.enabled", true);
 
 
-        temp = Arrays.asList("tohuman({[b][%category%][/b] Der User %name% benötigt Support.})");
+        temp = Collections.singletonList("tohuman({[b][%category%][/b] Der User %name% benötigt Support.})");
         config.set("supportbot.messages.anderes.functions", temp);
         config.set("supportbot.messages.anderes.enabled", true);
 
@@ -176,67 +177,67 @@ public class ConfigHelper {
         config.set("supportbot.messages.yt-ja.enabled", true);
 
 
-        temp = Arrays.asList("hasgroup({9;addgroup[{15}]|,|addgroup[{16}]|,|msg[{Du hast die Gruppe erhalten. Wenn du noch eine weitere Gruppe willst schreib mir einfach 'gruppen' und folge den anweisungen. Ansonsten schreibe mit einfach 'quit'}];msg[{Du kannst dir die Spiele Gruppen leider erst abholen wenn du User bist.}]})");
+        temp = Collections.singletonList("hasgroup({9;addgroup[{15}]|,|addgroup[{16}]|,|msg[{Du hast die Gruppe erhalten. Wenn du noch eine weitere Gruppe willst schreib mir einfach 'gruppen' und folge den anweisungen. Ansonsten schreibe mit einfach 'quit'}];msg[{Du kannst dir die Spiele Gruppen leider erst abholen wenn du User bist.}]})");
         config.set("supportbot.messages.game-mc.functions", temp);
         config.set("supportbot.messages.game-mc.enabled", true);
 
 
-        temp = Arrays.asList("hasgroup({9;addgroup[{15}]|,|addgroup[{17}]|,|msg[{Du hast die Gruppe erhalten. Wenn du noch eine weitere Gruppe willst schreib mir einfach 'gruppen' und folge den anweisungen. Ansonsten schreibe mit einfach 'quit'}];msg[{Du kannst dir die Spiele Gruppen leider erst abholen wenn du User bist.}]})");
+        temp = Collections.singletonList("hasgroup({9;addgroup[{15}]|,|addgroup[{17}]|,|msg[{Du hast die Gruppe erhalten. Wenn du noch eine weitere Gruppe willst schreib mir einfach 'gruppen' und folge den anweisungen. Ansonsten schreibe mit einfach 'quit'}];msg[{Du kannst dir die Spiele Gruppen leider erst abholen wenn du User bist.}]})");
         config.set("supportbot.messages.game-lol.functions", temp);
         config.set("supportbot.messages.game-lol.enabled", true);
 
 
-        temp = Arrays.asList("hasgroup({9;addgroup[{15}]|,|addgroup[{16}]|,|msg[{Du hast die Gruppe erhalten. Wenn du noch eine weitere Gruppe willst schreib mir einfach 'gruppen' und folge den anweisungen. Ansonsten schreibe mit einfach 'quit'}];msg[{Du kannst dir die Spiele Gruppen leider erst abholen wenn du User bist.}]})");
+        temp = Collections.singletonList("hasgroup({9;addgroup[{15}]|,|addgroup[{16}]|,|msg[{Du hast die Gruppe erhalten. Wenn du noch eine weitere Gruppe willst schreib mir einfach 'gruppen' und folge den anweisungen. Ansonsten schreibe mit einfach 'quit'}];msg[{Du kannst dir die Spiele Gruppen leider erst abholen wenn du User bist.}]})");
         config.set("supportbot.messages.game-mc.functions", temp);
         config.set("supportbot.messages.game-mc.enabled", true);
 
 
-        temp = Arrays.asList("hasgroup({9;addgroup[{15}]|,|addgroup[{24}]|,|msg[{Du hast die Gruppe erhalten. Wenn du noch eine weitere Gruppe willst schreib mir einfach 'gruppen' und folge den anweisungen. Ansonsten schreibe mit einfach 'quit'}];msg[{Du kannst dir die Spiele Gruppen leider erst abholen wenn du User bist.}]})");
+        temp = Collections.singletonList("hasgroup({9;addgroup[{15}]|,|addgroup[{24}]|,|msg[{Du hast die Gruppe erhalten. Wenn du noch eine weitere Gruppe willst schreib mir einfach 'gruppen' und folge den anweisungen. Ansonsten schreibe mit einfach 'quit'}];msg[{Du kannst dir die Spiele Gruppen leider erst abholen wenn du User bist.}]})");
         config.set("supportbot.messages.game-csgo.functions", temp);
         config.set("supportbot.messages.game-csgo.enabled", true);
 
 
-        temp = Arrays.asList("hasgroup({9;addgroup[{15}]|,|addgroup[{64}]|,|msg[{Du hast die Gruppe erhalten. Wenn du noch eine weitere Gruppe willst schreib mir einfach 'gruppen' und folge den anweisungen. Ansonsten schreibe mit einfach 'quit'}];msg[{Du kannst dir die Spiele Gruppen leider erst abholen wenn du User bist.}]})");
+        temp = Collections.singletonList("hasgroup({9;addgroup[{15}]|,|addgroup[{64}]|,|msg[{Du hast die Gruppe erhalten. Wenn du noch eine weitere Gruppe willst schreib mir einfach 'gruppen' und folge den anweisungen. Ansonsten schreibe mit einfach 'quit'}];msg[{Du kannst dir die Spiele Gruppen leider erst abholen wenn du User bist.}]})");
         config.set("supportbot.messages.game-pubg.functions", temp);
         config.set("supportbot.messages.game-pubg.enabled", true);
 
 
-        temp = Arrays.asList("hasgroup({9;addgroup[{15}]|,|addgroup[{65}]|,|msg[{Du hast die Gruppe erhalten. Wenn du noch eine weitere Gruppe willst schreib mir einfach 'gruppen' und folge den anweisungen. Ansonsten schreibe mit einfach 'quit'}];msg[{Du kannst dir die Spiele Gruppen leider erst abholen wenn du User bist.}]})");
+        temp = Collections.singletonList("hasgroup({9;addgroup[{15}]|,|addgroup[{65}]|,|msg[{Du hast die Gruppe erhalten. Wenn du noch eine weitere Gruppe willst schreib mir einfach 'gruppen' und folge den anweisungen. Ansonsten schreibe mit einfach 'quit'}];msg[{Du kannst dir die Spiele Gruppen leider erst abholen wenn du User bist.}]})");
         config.set("supportbot.messages.game-arma.functions", temp);
         config.set("supportbot.messages.game-arma.enabled", true);
 
 
-        temp = Arrays.asList("hasgroup({9;addgroup[{15}]|,|addgroup[{66}]|,|msg[{Du hast die Gruppe erhalten. Wenn du noch eine weitere Gruppe willst schreib mir einfach 'gruppen' und folge den anweisungen. Ansonsten schreibe mit einfach 'quit'}];msg[{Du kannst dir die Spiele Gruppen leider erst abholen wenn du User bist.}]})");
+        temp = Collections.singletonList("hasgroup({9;addgroup[{15}]|,|addgroup[{66}]|,|msg[{Du hast die Gruppe erhalten. Wenn du noch eine weitere Gruppe willst schreib mir einfach 'gruppen' und folge den anweisungen. Ansonsten schreibe mit einfach 'quit'}];msg[{Du kannst dir die Spiele Gruppen leider erst abholen wenn du User bist.}]})");
         config.set("supportbot.messages.game-battlefield.functions", temp);
         config.set("supportbot.messages.game-battlefield.enabled", true);
 
 
-        temp = Arrays.asList("hasgroup({9;addgroup[{15}]|,|addgroup[{67}]|,|msg[{Du hast die Gruppe erhalten. Wenn du noch eine weitere Gruppe willst schreib mir einfach 'gruppen' und folge den anweisungen. Ansonsten schreibe mit einfach 'quit'}];msg[{Du kannst dir die Spiele Gruppen leider erst abholen wenn du User bist.}]})");
+        temp = Collections.singletonList("hasgroup({9;addgroup[{15}]|,|addgroup[{67}]|,|msg[{Du hast die Gruppe erhalten. Wenn du noch eine weitere Gruppe willst schreib mir einfach 'gruppen' und folge den anweisungen. Ansonsten schreibe mit einfach 'quit'}];msg[{Du kannst dir die Spiele Gruppen leider erst abholen wenn du User bist.}]})");
         config.set("supportbot.messages.game-gta.functions", temp);
         config.set("supportbot.messages.game-gta.enabled", true);
 
 
-        temp = Arrays.asList("hasgroup({9;addgroup[{15}]|,|addgroup[{68}]|,|msg[{Du hast die Gruppe erhalten. Wenn du noch eine weitere Gruppe willst schreib mir einfach 'gruppen' und folge den anweisungen. Ansonsten schreibe mit einfach 'quit'}];msg[{Du kannst dir die Spiele Gruppen leider erst abholen wenn du User bist.}]})");
+        temp = Collections.singletonList("hasgroup({9;addgroup[{15}]|,|addgroup[{68}]|,|msg[{Du hast die Gruppe erhalten. Wenn du noch eine weitere Gruppe willst schreib mir einfach 'gruppen' und folge den anweisungen. Ansonsten schreibe mit einfach 'quit'}];msg[{Du kannst dir die Spiele Gruppen leider erst abholen wenn du User bist.}]})");
         config.set("supportbot.messages.game-fifa.functions", temp);
         config.set("supportbot.messages.game-fifa.enabled", true);
 
 
-        temp = Arrays.asList("hasgroup({9;addgroup[{15}]|,|addgroup[{35}]|,|msg[{Du hast die Gruppe erhalten. Wenn du noch eine weitere Gruppe willst schreib mir einfach 'gruppen' und folge den anweisungen. Ansonsten schreibe mit einfach 'quit'}];msg[{Du kannst dir die Spiele Gruppen leider erst abholen wenn du User bist.}]})");
+        temp = Collections.singletonList("hasgroup({9;addgroup[{15}]|,|addgroup[{35}]|,|msg[{Du hast die Gruppe erhalten. Wenn du noch eine weitere Gruppe willst schreib mir einfach 'gruppen' und folge den anweisungen. Ansonsten schreibe mit einfach 'quit'}];msg[{Du kannst dir die Spiele Gruppen leider erst abholen wenn du User bist.}]})");
         config.set("supportbot.messages.game-fortnite.functions", temp);
         config.set("supportbot.messages.game-fortnite.enabled", true);
 
 
-        temp = Arrays.asList("hasgroup({9;addgroup[{15}]|,|addgroup[{70}]|,|msg[{Du hast die Gruppe erhalten. Wenn du noch eine weitere Gruppe willst schreib mir einfach 'gruppen' und folge den anweisungen. Ansonsten schreibe mit einfach 'quit'}];msg[{Du kannst dir die Spiele Gruppen leider erst abholen wenn du User bist.}]})");
+        temp = Collections.singletonList("hasgroup({9;addgroup[{15}]|,|addgroup[{70}]|,|msg[{Du hast die Gruppe erhalten. Wenn du noch eine weitere Gruppe willst schreib mir einfach 'gruppen' und folge den anweisungen. Ansonsten schreibe mit einfach 'quit'}];msg[{Du kannst dir die Spiele Gruppen leider erst abholen wenn du User bist.}]})");
         config.set("supportbot.messages.game-osu.functions", temp);
         config.set("supportbot.messages.game-osu.enabled", true);
 
 
-        temp = Arrays.asList("hasgroup({9;addgroup[{15}]|,|addgroup[{71}]|,|msg[{Du hast die Gruppe erhalten. Wenn du noch eine weitere Gruppe willst schreib mir einfach 'gruppen' und folge den anweisungen. Ansonsten schreibe mit einfach 'quit'}];msg[{Du kannst dir die Spiele Gruppen leider erst abholen wenn du User bist.}]})");
+        temp = Collections.singletonList("hasgroup({9;addgroup[{15}]|,|addgroup[{71}]|,|msg[{Du hast die Gruppe erhalten. Wenn du noch eine weitere Gruppe willst schreib mir einfach 'gruppen' und folge den anweisungen. Ansonsten schreibe mit einfach 'quit'}];msg[{Du kannst dir die Spiele Gruppen leider erst abholen wenn du User bist.}]})");
         config.set("supportbot.messages.game-overwatch.functions", temp);
         config.set("supportbot.messages.game-overwatch.enabled", true);
 
 
-        temp = Arrays.asList("hasgroup({9;addgroup[{15}]|,|addgroup[{72}]|,|msg[{Du hast die Gruppe erhalten. Wenn du noch eine weitere Gruppe willst schreib mir einfach 'gruppen' und folge den anweisungen. Ansonsten schreibe mit einfach 'quit'}];msg[{Du kannst dir die Spiele Gruppen leider erst abholen wenn du User bist.}]})");
+        temp = Collections.singletonList("hasgroup({9;addgroup[{15}]|,|addgroup[{72}]|,|msg[{Du hast die Gruppe erhalten. Wenn du noch eine weitere Gruppe willst schreib mir einfach 'gruppen' und folge den anweisungen. Ansonsten schreibe mit einfach 'quit'}];msg[{Du kannst dir die Spiele Gruppen leider erst abholen wenn du User bist.}]})");
         config.set("supportbot.messages.game-rocketleague.functions", temp);
         config.set("supportbot.messages.game-rocketleague.enabled", true);
 

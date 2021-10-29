@@ -13,8 +13,7 @@ public class CommandListener {
 
     public void start() {
         listening = true;
-        commandLine = new Thread(() ->
-        {
+        commandLine = new Thread(() -> {
             do {
                 Scanner s = new Scanner(System.in);
 
@@ -23,19 +22,21 @@ public class CommandListener {
                 didCommandExecute = false;
 
                 for (Command command : TeamSpeakBot.getCommandManager().getCommands()) {
-                    if (command.getName().equalsIgnoreCase(cmd)) {
-                        msg = msg.replace(cmd + " ", "");
-                        logger.debug(msg);
-                        String[] args = msg.split(" ");
-                        if (args.length < 1) {
-                            logger.debug("0 args found");
-                            command.execute(new String[]{}, -1);
-                        } else {
-                            logger.debug("found " + args.length + " args");
-                            command.execute(args, -1);
-                        }
-                        didCommandExecute = true;
+                    if (!command.getName().equalsIgnoreCase(cmd)) {
+                        continue;
                     }
+
+                    msg = msg.replace(cmd + " ", "");
+                    logger.debug(msg);
+                    String[] args = msg.split(" ");
+                    if (args.length < 1) {
+                        logger.debug("0 args found");
+                        command.execute(new String[]{}, -1);
+                    } else {
+                        logger.debug("found " + args.length + " args");
+                        command.execute(args, -1);
+                    }
+                    didCommandExecute = true;
                 }
                 if (!didCommandExecute) {
                     logger.write("Command not found, try 'help' to get Help!", -1);
@@ -61,5 +62,4 @@ public class CommandListener {
         listening = true;
         logger.write("Started Commandlinelistener!", -1);
     }
-
 }

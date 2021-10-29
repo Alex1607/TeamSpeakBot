@@ -16,12 +16,10 @@ import java.util.concurrent.TimeUnit;
 public class SupporterGroup extends Scheduler {
     private final ScheduledExecutorService scheduler;
     private ScheduledFuture<?> future;
-    private TS3Api api = TeamSpeakBot.api;
-    private String message = TeamSpeakBot.getConfig().getString("supportbot.message.added");
-    private int maxtime = TeamSpeakBot.getConfig().getInt("supportbot.maxafktime");
-    private int group = TeamSpeakBot.getConfig().getInt("supportbot.group");
-    private int period = TeamSpeakBot.getConfig().getInt("function.scheduler.supportergroup.timer");
-    private Logger logger = new Logger();
+    private final String message = TeamSpeakBot.getConfig().getString("supportbot.message.added");
+    private final int maxtime = TeamSpeakBot.getConfig().getInt("supportbot.maxafktime");
+    private final int group = TeamSpeakBot.getConfig().getInt("supportbot.group");
+    private final int period = TeamSpeakBot.getConfig().getInt("function.scheduler.supportergroup.timer");
 
     public SupporterGroup() {
         super("SupporterGroup", "Aktualiesiert die Servergruppe", 0, 10);
@@ -31,18 +29,16 @@ public class SupporterGroup extends Scheduler {
 
     private void run() {
         logger.debug("SupporterGroupScheduler runned");
-        for (Client i : api.getClients()) {
-            ClientInfo info = api.getClientInfo(i.getId());
+        for (Client i : TeamSpeakBot.api.getClients()) {
+            ClientInfo info = TeamSpeakBot.api.getClientInfo(i.getId());
             int dbId = i.getDatabaseId();
             if (info == null || info.isServerQueryClient()) {
                 continue;
             }
-            if (SupportBot.afk.contains(i.getUniqueIdentifier())) {
-                if ((info.getIdleTime() < maxtime) && !info.isAway()) {
-                    SupportBot.afk.remove(i.getUniqueIdentifier());
-                    api.addClientToServerGroup(group, dbId);
-                    api.sendPrivateMessage(i.getId(), message);
-                }
+            if (SupportBot.afk.contains(i.getUniqueIdentifier()) && (info.getIdleTime() < maxtime) && !info.isAway()) {
+                SupportBot.afk.remove(i.getUniqueIdentifier());
+                TeamSpeakBot.api.addClientToServerGroup(group, dbId);
+                TeamSpeakBot.api.sendPrivateMessage(i.getId(), message);
             }
         }
     }

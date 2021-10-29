@@ -15,43 +15,39 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class SupportBot extends Event {
-    public static ArrayList<String> afk = new ArrayList<>();
-    public static ArrayList<Integer> rentingMusic = new ArrayList<>();
-    private Map<Integer, String> sup = new HashMap<>();
-    private Timer timer = new Timer();
-    private TS3Api api = TeamSpeakBot.api;
-    private Map<Integer, TimerTask> timers = new HashMap<>();
-    private Logger logger = new Logger();
+    public static final List<String> afk = new ArrayList<>();
+    public static final List<Integer> rentingMusic = new ArrayList<>();
+    private final Map<Integer, String> sup = new HashMap<>();
+    private final Timer timer = new Timer();
+    private final Map<Integer, TimerTask> timers = new HashMap<>();
 
-    private String removefromgroup = TeamSpeakBot.getConfig().getString("supportbot.message.removed");
-    private String nosups = TeamSpeakBot.getConfig().getString("supportbot.message.nosups");
-    private String atleastonesup = TeamSpeakBot.getConfig().getString("supportbot.message.atleastonesup");
-    private String supportend = TeamSpeakBot.getConfig().getString("supportbot.message.supportend");
-    private String didntunterstand = TeamSpeakBot.getConfig().getString("supportbot.message.didntunderstand");
-    private String noFreeMusicBots = TeamSpeakBot.getConfig().getString("supportbot.message.nofreemusicbot");
-    private int waitingroom = TeamSpeakBot.getConfig().getInt("supportbot.waitingroom");
-    private int endroom = TeamSpeakBot.getConfig().getInt("supportbot.endroom");
-    private int maxafktime = TeamSpeakBot.getConfig().getInt("supportbot.maxafktime");
-    private int supgroup = TeamSpeakBot.getConfig().getInt("supportbot.group");
-    private int maxwaitingtime = TeamSpeakBot.getConfig().getInt("supportbot.maxwaitingtime");
-    private int supportchannel = TeamSpeakBot.getConfig().getInt("supportbot.supportchannel");
-    private int maxmsglenght = TeamSpeakBot.getConfig().getInt("supportbot.maxmsglenght");
-    private List<String> joinfunctions = (List<String>) TeamSpeakBot.getConfig().getList("supportbot.function.join");
-    private List<String> afkfunctions = (List<String>) TeamSpeakBot.getConfig().getList("supportbot.function.afk");
+    private final String removefromgroup = TeamSpeakBot.getConfig().getString("supportbot.message.removed");
+    private final String nosups = TeamSpeakBot.getConfig().getString("supportbot.message.nosups");
+    private final String atleastonesup = TeamSpeakBot.getConfig().getString("supportbot.message.atleastonesup");
+    private final String supportend = TeamSpeakBot.getConfig().getString("supportbot.message.supportend");
+    private final String didntunterstand = TeamSpeakBot.getConfig().getString("supportbot.message.didntunderstand");
+    private final String noFreeMusicBots = TeamSpeakBot.getConfig().getString("supportbot.message.nofreemusicbot");
+    private final int waitingroom = TeamSpeakBot.getConfig().getInt("supportbot.waitingroom");
+    private final int endroom = TeamSpeakBot.getConfig().getInt("supportbot.endroom");
+    private final int maxafktime = TeamSpeakBot.getConfig().getInt("supportbot.maxafktime");
+    private final int supgroup = TeamSpeakBot.getConfig().getInt("supportbot.group");
+    private final int maxwaitingtime = TeamSpeakBot.getConfig().getInt("supportbot.maxwaitingtime");
+    private final int supportchannel = TeamSpeakBot.getConfig().getInt("supportbot.supportchannel");
+    private final int maxmsglenght = TeamSpeakBot.getConfig().getInt("supportbot.maxmsglenght");
+    private final List<String> joinfunctions = (List<String>) TeamSpeakBot.getConfig().getList("supportbot.function.join");
+    private final List<String> afkfunctions = (List<String>) TeamSpeakBot.getConfig().getList("supportbot.function.afk");
 
     @Override
     public void ClientMove(ClientMovedEvent event) {
         int clientid = event.getClientId();
         if (event.getTargetChannelId() == supportchannel) {
             for (String functions : joinfunctions) {
-                parseAndExecute(functions, clientid, api.getClientInfo(clientid));
+                parseAndExecute(functions, clientid, TeamSpeakBot.api.getClientInfo(clientid));
             }
             startIdleTimer(clientid);
-        } else {
-            if (timers.containsKey(event.getClientId())) {
-                timers.get(event.getClientId()).cancel();
-                timers.remove(event.getClientId());
-            }
+        } else if (timers.containsKey(event.getClientId())) {
+            timers.get(event.getClientId()).cancel();
+            timers.remove(event.getClientId());
         }
     }
 
@@ -59,13 +55,13 @@ public class SupportBot extends Event {
         TimerTask t = new TimerTask() {
             @Override
             public void run() {
-                if (api.getClientInfo(clientid) == null) {
+                if (TeamSpeakBot.api.getClientInfo(clientid) == null
+                    || TeamSpeakBot.api.getClientInfo(clientid).getChannelId() != supportchannel
+                ) {
                     return;
                 }
-                if (api.getClientInfo(clientid).getChannelId() == supportchannel) {
-                    for (String functions : afkfunctions) {
-                        parseAndExecute(functions, clientid, api.getClientInfo(clientid));
-                    }
+                for (String functions : afkfunctions) {
+                    parseAndExecute(functions, clientid, TeamSpeakBot.api.getClientInfo(clientid));
                 }
             }
         };
@@ -76,27 +72,29 @@ public class SupportBot extends Event {
     @Override
     public void TextMessage(TextMessageEvent event) {
         // Only react to channel messages not sent by the query itself
-        if (event.getTargetMode() == TextMessageTargetMode.CLIENT) {
-            String message = event.getMessage().toLowerCase();
-            message = message.replace(" ", "");
-            int iid = event.getInvokerId();
-            if (api.getClientInfo(iid).getChannelId() != supportchannel) {
-                return; // Nicht im Support Warteraum
+        if (event.getTargetMode() != TextMessageTargetMode.CLIENT) {
+            return;
+        }
+
+        String message = event.getMessage().toLowerCase();
+        message = message.replace(" ", "");
+        int iid = event.getInvokerId();
+        if (TeamSpeakBot.api.getClientInfo(iid).getChannelId() != supportchannel) {
+            return; // Nicht im Support Warteraum
+        }
+        if (message.length() < maxmsglenght) {
+            ClientInfo ci = TeamSpeakBot.api.getClientInfo(event.getInvokerId());
+            logger.chat(ci.getNickname() + " -> " + message);
+            boolean enabled = TeamSpeakBot.getConfig().getBoolean("supportbot.messages." + message + ".enabled");
+            if (!enabled) {
+                msg(iid, didntunterstand);
+                return;
             }
-            if (message.length() < maxmsglenght) {
-                ClientInfo ci = api.getClientInfo(event.getInvokerId());
-                logger.chat(ci.getNickname() + " -> " + message);
-                Boolean enabled = TeamSpeakBot.getConfig().getBoolean("supportbot.messages." + message + ".enabled");
-                if (enabled == null || !enabled) {
-                    msg(iid, didntunterstand);
-                    return;
-                }
-                getFunctionsAndRun("supportbot.messages." + message + ".functions", iid, ci);
-            }
-            if (timers.containsKey(iid)) {
-                timers.get(iid).cancel();
-                timers.remove(iid);
-            }
+            getFunctionsAndRun("supportbot.messages." + message + ".functions", iid, ci);
+        }
+        if (timers.containsKey(iid)) {
+            timers.get(iid).cancel();
+            timers.remove(iid);
         }
     }
 
@@ -113,18 +111,18 @@ public class SupportBot extends Event {
 
     private void supportReady(int id, String message) {
         int supCount = 0;
-        message = message.replace("%name%", "[URL=" + api.getClientInfo(id).getClientURI() + "]" + api.getClientInfo(id).getNickname() + "[/URL]");
+        message = message.replace("%name%", "[URL=" + TeamSpeakBot.api.getClientInfo(id).getClientURI() + "]" + TeamSpeakBot.api.getClientInfo(id).getNickname() + "[/URL]");
         message = message.replace("%category%", sup.getOrDefault(id, "->"));
         logger.debug("SupporterGroupEvent runned");
-        for (Client i : api.getClients()) {
-            ClientInfo info = api.getClientInfo(i.getId());
+        for (Client i : TeamSpeakBot.api.getClients()) {
+            ClientInfo info = TeamSpeakBot.api.getClientInfo(i.getId());
             int dbId = i.getDatabaseId();
             if (info == null || info.isServerQueryClient()) {
                 continue;
             }
             if (info.isInServerGroup(supgroup)) {
                 if ((info.getIdleTime() > maxafktime) || (info.isAway())) {
-                    api.removeClientFromServerGroup(supgroup, dbId);
+                    TeamSpeakBot.api.removeClientFromServerGroup(supgroup, dbId);
                     afk.add(i.getUniqueIdentifier());
                     msg(i.getId(), removefromgroup);
                 } else {
@@ -148,11 +146,11 @@ public class SupportBot extends Event {
     }
 
     private void move(int id, int channel) {
-        api.moveClient(id, channel);
+        TeamSpeakBot.api.moveClient(id, channel);
     }
 
     private void msg(int id, String msg) {
-        api.sendPrivateMessage(id, msg.replace("%br%", "\n"));
+        TeamSpeakBot.api.sendPrivateMessage(id, msg.replace("%br%", "\n"));
     }
 
     private boolean parseAndExecute(String function, int id, ClientInfo clientInfo) {
@@ -168,25 +166,25 @@ public class SupportBot extends Event {
                     msg(id, args[0]);
                     break;
                 case "poke":
-                    api.pokeClient(id, args[0]);
+                    TeamSpeakBot.api.pokeClient(id, args[0]);
                     break;
                 case "kickchannel":
-                    api.kickClientFromChannel(args[0], id);
+                    TeamSpeakBot.api.kickClientFromChannel(args[0], id);
                     break;
                 case "kickserver":
-                    api.kickClientFromServer(args[0], id);
+                    TeamSpeakBot.api.kickClientFromServer(args[0], id);
                     break;
                 case "endsupport":
                     endSupport(id);
                     break;
                 case "addgroup":
                     if (!clientInfo.isInServerGroup(Integer.parseInt(args[0]))) {
-                        api.addClientToServerGroup(Integer.parseInt(args[0]), clientInfo.getDatabaseId());
+                        TeamSpeakBot.api.addClientToServerGroup(Integer.parseInt(args[0]), clientInfo.getDatabaseId());
                     }
                     break;
                 case "removegroup":
                     if (clientInfo.isInServerGroup(Integer.parseInt(args[0]))) {
-                        api.removeClientFromServerGroup(Integer.parseInt(args[0]), clientInfo.getDatabaseId());
+                        TeamSpeakBot.api.removeClientFromServerGroup(Integer.parseInt(args[0]), clientInfo.getDatabaseId());
                     }
                     break;
                 case "supportcategory":

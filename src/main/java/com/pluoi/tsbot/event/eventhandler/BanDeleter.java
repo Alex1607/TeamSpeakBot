@@ -7,8 +7,6 @@ import com.pluoi.tsbot.TeamSpeakBot;
 import com.pluoi.tsbot.event.Event;
 
 public class BanDeleter extends Event {
-    private Logger logger = new Logger();
-
     @Override
     public void ClientLeave(ClientLeaveEvent event) {
         for (Ban bans : TeamSpeakBot.api.getBans()) {

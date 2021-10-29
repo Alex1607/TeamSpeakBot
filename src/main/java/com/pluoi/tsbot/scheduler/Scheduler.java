@@ -1,10 +1,13 @@
 package com.pluoi.tsbot.scheduler;
 
+import com.pluoi.tsbot.Logger;
+
 public abstract class Scheduler {
-    private int delay;
+    protected static final Logger logger = new Logger();
+    private final int delay;
+    private final String name;
+    private final String description;
     private int period;
-    private String name;
-    private String description;
 
     /**
      * Create a new Scheduler to run a task but this will not start it immediately.
@@ -14,7 +17,7 @@ public abstract class Scheduler {
      * @param delay       How many seconds should the scheduler wait befor executing the first time.
      * @param period      How many seconds should the scheduler wait befor executing again.
      */
-    public Scheduler(String name, String description, Integer delay, Integer period) {
+    protected Scheduler(String name, String description, Integer delay, Integer period) {
         this.name = name;
         this.description = description;
         this.delay = delay;

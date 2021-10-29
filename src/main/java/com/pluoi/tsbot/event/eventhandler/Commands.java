@@ -9,22 +9,19 @@ import com.pluoi.tsbot.event.Event;
 import java.util.List;
 
 public class Commands extends Event {
-    private int mod = TeamSpeakBot.getConfig().getInt("function.event.commands.modgroup");
-    private int admin = TeamSpeakBot.getConfig().getInt("function.event.commands.admingroup");
-    private List<String> modcommands = (List<String>) TeamSpeakBot.getConfig().getList("function.event.commands.modcommands");
-    private Logger logger = new Logger();
+    private final int mod = TeamSpeakBot.getConfig().getInt("function.event.commands.modgroup");
+    private final int admin = TeamSpeakBot.getConfig().getInt("function.event.commands.admingroup");
+    private final List<String> modcommands = (List<String>) TeamSpeakBot.getConfig().getList("function.event.commands.modcommands");
 
     @Override
     public void TextMessage(TextMessageEvent event) {
         int id = event.getInvokerId();
         String msg = event.getMessage();
         String cmd = msg.split(" ")[0];
-        if (TeamSpeakBot.api.getClientInfo(id).isInServerGroup(admin)) {
+        if (TeamSpeakBot.api.getClientInfo(id).isInServerGroup(admin)
+            || (TeamSpeakBot.api.getClientInfo(id).isInServerGroup(mod) && modcommands.contains(cmd))
+        ) {
             runCommand(id, msg, cmd);
-        } else if (TeamSpeakBot.api.getClientInfo(id).isInServerGroup(mod)) {
-            if (modcommands.contains(cmd)) {
-                runCommand(id, msg, cmd);
-            }
         }
     }
 

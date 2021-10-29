@@ -6,18 +6,19 @@ import com.pluoi.tsbot.event.eventhandler.*;
 import com.pluoi.tsbot.event.events.*;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class EventManager {
-    private static ArrayList<Event> events = new ArrayList<>();
-    private Event event = new Event();
-    private boolean ipbandeleter = TeamSpeakBot.getConfig().getBoolean("function.event.ipbandeleter.enabled");
-    private boolean channelspam = TeamSpeakBot.getConfig().getBoolean("function.event.channelspam.enabled");
-    private boolean commands = TeamSpeakBot.getConfig().getBoolean("function.event.commands.enabled");
-    private boolean botmuter = TeamSpeakBot.getConfig().getBoolean("function.event.botmuter.enabled");
-    private boolean supportbot = TeamSpeakBot.getConfig().getBoolean("function.event.supportbot.enabled");
-    private boolean iplimit = TeamSpeakBot.getConfig().getBoolean("function.event.iplimit.enabled");
-    private boolean musicbotrent = TeamSpeakBot.getConfig().getBoolean("function.event.musicbotrent.enabled");
-    private Logger logger = new Logger();
+    private static List<Event> events = new ArrayList<>();
+    private final Event event = new Event();
+    private final boolean ipbandeleter = TeamSpeakBot.getConfig().getBoolean("function.event.ipbandeleter.enabled");
+    private final boolean channelspam = TeamSpeakBot.getConfig().getBoolean("function.event.channelspam.enabled");
+    private final boolean commands = TeamSpeakBot.getConfig().getBoolean("function.event.commands.enabled");
+    private final boolean botmuter = TeamSpeakBot.getConfig().getBoolean("function.event.botmuter.enabled");
+    private final boolean supportbot = TeamSpeakBot.getConfig().getBoolean("function.event.supportbot.enabled");
+    private final boolean iplimit = TeamSpeakBot.getConfig().getBoolean("function.event.iplimit.enabled");
+    private final boolean musicbotrent = TeamSpeakBot.getConfig().getBoolean("function.event.musicbotrent.enabled");
+    private final Logger logger = new Logger();
 
     public EventManager() {
         logger.write("Starting EventManager...", -1);
@@ -30,7 +31,7 @@ public class EventManager {
         logger.write("EventManager started!", -1);
     }
 
-    public static ArrayList<Event> getEvents() {
+    public static List<Event> getEvents() {
         return events;
     }
 

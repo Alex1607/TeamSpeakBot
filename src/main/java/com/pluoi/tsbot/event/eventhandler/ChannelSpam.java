@@ -12,11 +12,9 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 public class ChannelSpam extends Event {
-    private static Map<Integer, Long> channelCreateTime = new HashMap<>();
-    private TS3Api api = TeamSpeakBot.api;
-    private String message = TeamSpeakBot.getConfig().getString("antichannelspam.message");
-    private int configtime = TeamSpeakBot.getConfig().getInt("antichannelspam.waittime");
-    private Logger logger = new Logger();
+    private static final Map<Integer, Long> channelCreateTime = new HashMap<>();
+    private final String message = TeamSpeakBot.getConfig().getString("antichannelspam.message");
+    private final int configtime = TeamSpeakBot.getConfig().getInt("antichannelspam.waittime");
 
     public static void resetTimer() {
         channelCreateTime.clear();
@@ -26,7 +24,7 @@ public class ChannelSpam extends Event {
     public void ChannelCreate(ChannelCreateEvent e) {
         int id = e.getInvokerId();
         long time = System.currentTimeMillis();
-        ClientInfo clientInfo = api.getClientInfo(id);
+        ClientInfo clientInfo = TeamSpeakBot.api.getClientInfo(id);
         if (clientInfo == null || clientInfo.isServerQueryClient()) {
             return;
         }
@@ -39,11 +37,11 @@ public class ChannelSpam extends Event {
                         TimeUnit.MILLISECONDS.toSeconds(configtime - (time - lastTime)) -
                                 TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(configtime - (time - lastTime)))
                 );
-                api.pokeClient(id, message.replace("%time%", String.valueOf(waittime)));
+                TeamSpeakBot.api.pokeClient(id, message.replace("%time%", String.valueOf(waittime)));
                 return;
             }
         }
-        logger.write("Created new Channel: " + api.getChannelInfo(e.getChannelId()).getName(), -1);
+        logger.write("Created new Channel: " + TeamSpeakBot.api.getChannelInfo(e.getChannelId()).getName(), -1);
         channelCreateTime.put(id, time);
     }
 }

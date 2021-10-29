@@ -18,14 +18,15 @@ import java.util.logging.Level;
 
 public class TeamSpeakBot {
     public static TS3Api api = null;
+
     private static YamlFile config;
     private static TeamSpeakBot instance;
     private static CommandManager commandManager;
     private static ConfigHelper configHelper;
     private static CommandListener commandListener;
-    private TS3Config tsconfig;
-    private TS3Query query;
-    private Logger logger = new Logger();
+    private final TS3Config tsconfig;
+    private final TS3Query query;
+    private final Logger logger = new Logger();
 
     private TeamSpeakBot() {
         logger.write("Starting...", -1);

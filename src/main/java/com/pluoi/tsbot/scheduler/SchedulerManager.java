@@ -5,15 +5,16 @@ import com.pluoi.tsbot.TeamSpeakBot;
 import com.pluoi.tsbot.scheduler.schedulers.*;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class SchedulerManager {
-    private static ArrayList<Scheduler> schedulers = new ArrayList<>();
-    private boolean musicbotmover = TeamSpeakBot.getConfig().getBoolean("function.scheduler.musicbotmover.enabled");
-    private boolean musicbotmuter = TeamSpeakBot.getConfig().getBoolean("function.scheduler.musicbotmuter.enabled");
-    private boolean randomcatgif = TeamSpeakBot.getConfig().getBoolean("function.scheduler.randomcatgif.enabled");
-    private boolean supportergroup = TeamSpeakBot.getConfig().getBoolean("function.scheduler.supportergroup.enabled");
-    private boolean usergroup = TeamSpeakBot.getConfig().getBoolean("function.scheduler.usergroup.enabled");
-    private Logger logger = new Logger();
+    private static final List<Scheduler> schedulers = new ArrayList<>();
+    private final boolean musicbotmover = TeamSpeakBot.getConfig().getBoolean("function.scheduler.musicbotmover.enabled");
+    private final boolean musicbotmuter = TeamSpeakBot.getConfig().getBoolean("function.scheduler.musicbotmuter.enabled");
+    private final boolean randomcatgif = TeamSpeakBot.getConfig().getBoolean("function.scheduler.randomcatgif.enabled");
+    private final boolean supportergroup = TeamSpeakBot.getConfig().getBoolean("function.scheduler.supportergroup.enabled");
+    private final boolean usergroup = TeamSpeakBot.getConfig().getBoolean("function.scheduler.usergroup.enabled");
+    private final Logger logger = new Logger();
 
     public SchedulerManager() {
         logger.write("Starting ScheduleManager...", -1);
@@ -22,7 +23,7 @@ public class SchedulerManager {
         logger.write("ScheduleManager started!", -1);
     }
 
-    public static ArrayList<Scheduler> getActiveThreads() {
+    public static List<Scheduler> getActiveThreads() {
         return schedulers;
     }
 

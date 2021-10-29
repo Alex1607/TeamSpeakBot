@@ -15,11 +15,10 @@ import java.util.concurrent.TimeUnit;
 public class MusikMuteSchduler extends Scheduler {
     private final ScheduledExecutorService scheduler;
     private ScheduledFuture<?> future;
-    private int normalgroup = TeamSpeakBot.getConfig().getInt("botmuter.channel.normalgroup");
-    private int mutegroup = TeamSpeakBot.getConfig().getInt("botmuter.channel.mutegroup");
-    private int rentbot = TeamSpeakBot.getConfig().getInt("botmuter.server.rentgroup");
-    private int period = TeamSpeakBot.getConfig().getInt("function.scheduler.musicbotmuter.timer");
-    private Logger logger = new Logger();
+    private final int normalgroup = TeamSpeakBot.getConfig().getInt("botmuter.channel.normalgroup");
+    private final int mutegroup = TeamSpeakBot.getConfig().getInt("botmuter.channel.mutegroup");
+    private final int rentbot = TeamSpeakBot.getConfig().getInt("botmuter.server.rentgroup");
+    private final int period = TeamSpeakBot.getConfig().getInt("function.scheduler.musicbotmuter.timer");
 
     public MusikMuteSchduler() {
         super("MusikMute", "Checks if the Musik Channel is empty and then mutes the bot", 0, 60);
@@ -40,13 +39,11 @@ public class MusikMuteSchduler extends Scheduler {
                 continue;
             }
             int channelId = client.getChannelId();
-            if (tempChannels.contains(channelId)) {
-                if (client.isInServerGroup(normalgroup) && !client.isInServerGroup(rentbot)) {
-                    if (client.getChannelGroupId() == mutegroup) {
-                        return;
-                    }
-                    TeamSpeakBot.api.setClientChannelGroup(mutegroup, channelId, client.getDatabaseId());
+            if (tempChannels.contains(channelId) && client.isInServerGroup(normalgroup) && !client.isInServerGroup(rentbot)) {
+                if (client.getChannelGroupId() == mutegroup) {
+                    return;
                 }
+                TeamSpeakBot.api.setClientChannelGroup(mutegroup, channelId, client.getDatabaseId());
             }
         }
     }
